@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>レジシステム</title>
+        <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+        <h1>レジシステム</h1>
+        <div>
+            商品コード<input type="text" id="item_code">
+            個数<input type="text" id="item_cnt">
+            <button id="item_order">ご注文</button><br>
+            <button id="clear_order">画面クリア</button><br>
+            <textarea id="order_result" class="order_result"></textarea><br>
+        </div>
+        <div>
+            お支払い金額<input type="text" id="input_money">
+            <button id="item_total">お会計</button><br>
+            <textarea id="total_result" class="total_result"></textarea>
+        </div>
+        <script type="text/javascript" src="./eel.js"></script>
+        <script>
+            //　ご注文ボタンクリック
+            item_order.addEventListener('click', () => {
+                if(item_code.value == "" || item_cnt.value == ""){
+                    alert("商品コードと個数を入力してください。")
+                }
+                else{
+                    eel.register_order(item_code.value,item_cnt.value)
+                }
+            })
+            eel.expose(view_order_log_js)
+            function view_order_log_js(text){
+                order_result.value += text + '\n'
+            }
+            eel.expose(view_order_log_js_clear)
+            function view_order_log_js_clear(){
+                order_result.value = null
+            }
+
+            // お会計ボタンクリック
+            item_total.addEventListener('click', () => {
+                if(input_money.value == ""){
+                    alert("お支払い金額を入力してください。")
+                }
+                else{
+                    eel.order_payment(input_money.value)
+                }
+            })
+            eel.expose(view_total_log_js)
+            function view_total_log_js(text){
+                total_result.value += text + '\n'
+            }
+            
+            // オーダークリアボタンクリック
+            clear_order.addEventListener('click', () => {
+                eel.clear_order()
+                order_result.value = null
+                total_result.value = null
+            })
+        </script>
+    </body>
+</html>
